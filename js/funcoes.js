@@ -6,8 +6,7 @@ function mapearParaSeries(dadosApi) {
       show.name,
       show.premiered ? show.premiered.substring(0, 4) : null,
       show.image ? show.image.medium : null,
-      show.rating && show.rating.average ? show.rating.average : null,
-      show.summary || ""
+      show.rating && show.rating.average ? show.rating.average : null
     );
   });
 }

@@ -19,21 +19,18 @@ function criarCardSerie(serie, ehFavorita, onToggleFavorito) {
 
   const nota = document.createElement("span");
   nota.classList.add("badge");
-  const notaValor = serie.nota;
 
-  if (notaValor) {
+  if (serie.nota) {
     nota.textContent = `Nota: ${serie.getNotaFormatada()}`;
-
-    if (notaValor >= 8) {
-      nota.classList.add("good");
-    } else if (notaValor >= 6) {
-      nota.classList.add("medium");
-    } else {
-      nota.classList.add("bad");
-    }
+    nota.classList.add(
+      serie.nota >= 8 ? "good" :
+      serie.nota >= 6 ? "medium" :
+      "bad"
+    );
   } else {
     nota.textContent = "Sem nota";
   }
+
   card.appendChild(nota);
 
   const footer = document.createElement("div");
@@ -42,9 +39,7 @@ function criarCardSerie(serie, ehFavorita, onToggleFavorito) {
   const botao = document.createElement("button");
   botao.textContent = ehFavorita ? "Remover favorito" : "Favoritar";
 
-  botao.addEventListener("click", () => {
-    onToggleFavorito(serie);
-  });
+  botao.addEventListener("click", () => onToggleFavorito(serie));
 
   footer.appendChild(botao);
   card.appendChild(footer);
@@ -56,7 +51,7 @@ function renderizarResultados(series, favoritos, onToggleFavorito) {
   const container = document.getElementById("resultados");
   container.innerHTML = "";
 
-  if (series.length === 0) {
+  if (!series.length) {
     container.textContent = "Nenhuma série encontrada.";
     return;
   }
@@ -72,7 +67,7 @@ function renderizarFavoritos(seriesFavoritas, onToggleFavorito) {
   const container = document.getElementById("lista-favoritos");
   container.innerHTML = "";
 
-  if (seriesFavoritas.length === 0) {
+  if (!seriesFavoritas.length) {
     container.textContent = "Você ainda não favoritou nenhuma série.";
     return;
   }
@@ -84,18 +79,14 @@ function renderizarFavoritos(seriesFavoritas, onToggleFavorito) {
 }
 
 function atualizarResumoFavoritos(seriesFavoritas) {
-  const elResumo = document.getElementById("resumo-favoritos");
+  const Resumo = document.getElementById("resumo-favoritos");
   const total = seriesFavoritas.length;
   const media = calcularMediaNota(seriesFavoritas);
 
-  let texto = `Total de favoritos: ${total}`;
-  if (media !== null) {
-    texto += ` | Média de nota: ${media.toFixed(2)}`;
-  } else {
-    texto += ` | Sem notas suficientes para média.`;
-  }
-
-  elResumo.textContent = texto;
+  Resumo.textContent =
+    media === null
+      ? `Total de favoritos: ${total} | Sem notas suficientes para média.`
+      : `Total de favoritos: ${total} | Média de nota: ${media.toFixed(2)}`;
 }
 
 window.criarCardSerie = criarCardSerie;
